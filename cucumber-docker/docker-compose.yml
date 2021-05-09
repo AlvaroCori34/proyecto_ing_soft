@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  csd:
+    container_name: kleer-csd-v2
+    #build: . use this, if you change the dockerfile
+    image: yamitcar/csd:ruby2.6.5
+    tty: true
+    ports:
+      - '0.0.0.0:4567:4567'
+    volumes:
+      - .:/CSD
