@@ -14,6 +14,9 @@ class MapOfRobot
     def shape()
         return @limit_x, @limit_y
     end
+    def getSizeMatrix()
+        return @limit_x * @limit_y
+    end
 end
 
 #map= MapOfRobot.new(2,2)
