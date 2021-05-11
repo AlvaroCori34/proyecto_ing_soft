@@ -7,3 +7,6 @@ Scenario:
     Given ingresar a la pagina de comandos
     When yo lleno en 'limites' con '2 2'
     Then presiono el boton para correr
+
+Scenario:
+    When presione el boton correr

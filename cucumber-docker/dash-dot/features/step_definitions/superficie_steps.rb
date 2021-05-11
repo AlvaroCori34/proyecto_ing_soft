@@ -9,3 +9,9 @@ end
 Then("presiono el boton para correr") do
     click_button('correr')
 end
+
+
+
+When("presione el boton correr") do
+    visit '/comandos'
+end
