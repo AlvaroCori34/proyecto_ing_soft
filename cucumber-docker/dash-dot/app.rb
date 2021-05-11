@@ -6,11 +6,13 @@ get '/' do
     erb :bienvenida
 end
 
-post '/inicio' do
+post '/comandos' do
     commandos=(params[:caja_de_comandos]).to_s
     commandos=commandos.split(" ")
     @map = MapOfRobot.new(commandos[0].to_i, commandos[1].to_i)
-    erb :inicio
+    erb :comandos
 end
-
+get '/comandos' do
+    erb :comandos
+end
 

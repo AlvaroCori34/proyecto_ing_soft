@@ -1,7 +1,11 @@
 Given("ingresar a la pagina de comandos") do
-    visit '/inicio'
+    visit '/comandos'
 end
   
-When("presiono el boton para correr") do
+When("yo lleno en {string} con {string}") do |string, string2|
+    fill_in(string, :with => string2)
+end
+
+Then("presiono el boton para correr") do
     click_button('correr')
 end

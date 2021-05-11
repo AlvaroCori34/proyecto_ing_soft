@@ -5,4 +5,5 @@ Feature:
 
 Scenario:
     Given ingresar a la pagina de comandos
-    When presiono el boton para correr
+    When yo lleno en 'limites' con '2 2'
+    Then presiono el boton para correr
