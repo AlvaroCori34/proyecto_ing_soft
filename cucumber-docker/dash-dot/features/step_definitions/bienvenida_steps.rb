@@ -13,10 +13,4 @@ When("presiono el boton para dar inicio") do
 end
 
 
-#When ("Yo lleno {string} con {string}") do |field, value|
-#    fill_in(field, :with => value)
-#  end
-#Then("deberia mostrar una caja de comandos {string}") do |message|
-#    expect(page.body).to match /#{message}/m
-#end
 
