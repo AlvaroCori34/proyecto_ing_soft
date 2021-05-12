@@ -8,13 +8,13 @@ class MapOfRobot
         @squares = Matrix.build(lim_x, lim_y) { Square.new()}
         #puts(@squares[0, 0].getObject())
     end
-    def getSquare(row, col)
+    def GetSquare(row, col)
         return @squares[row,col]
     end
-    def shape()
+    def Shape()
         return @limit_x, @limit_y
     end
-    def getSizeMatrix()
+    def GetSizeMatrix()
         return @limit_x * @limit_y
     end
 end

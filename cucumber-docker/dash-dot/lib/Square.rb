@@ -3,7 +3,7 @@ class Square
         @object=nil
 
     end
-    def getObject()
+    def GetObject()
         return @object
     end
 end

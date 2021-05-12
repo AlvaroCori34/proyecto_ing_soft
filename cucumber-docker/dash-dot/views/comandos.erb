@@ -1,10 +1,15 @@
 <h3>Comandos a ejecutar</h3>
 <form method='post' action='/comandos'>
-    <!--<textarea name="caja_de_comandos"></textarea>-->
     <input type="submit" value='correr'>
-    <input type="text" id="fname" name="limites">
+    <input type="number" name="limite_x">
+    <input type="number" name="limite_y">
 </form>
-<h2>Tamaño de la superficie: <%= @superficie_x%> <%= @superficie_y%></h2>  
+<h2>Tamaño de la superficie: <%= @superficie_x%> <%= @superficie_y%></h2> 
+<h2 name="caja_titulo">Caja</h2> 
+<form method='post' action='/comandos'>
+    <textarea rows="4" cols="50" name="caja_de_comandos"></textarea>
+    <input type="submit" value='correr_comandos'>
+</form>
 <form method='get' action='/retornar'>
     <input type='submit' value='Retornar'> 
 </form>

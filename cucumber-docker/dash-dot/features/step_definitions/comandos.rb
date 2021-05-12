@@ -18,3 +18,6 @@ Then("deberia mostrar los limites de la superficie: {string}") do |string|
     expect(page.body).to match /#{string}/m
 end
 
+When("presiono el boton para correr_comandos") do
+    click_button('correr')
+end
