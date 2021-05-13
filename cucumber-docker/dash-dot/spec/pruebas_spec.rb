@@ -28,7 +28,16 @@ RSpec.describe "Pruebas del robot y su mapa" do
         expect(x).to eq 3 and expect(y).to eq 1 and expect(card).to eq "O"  
     end
 
-    
+    it "deberia devolver las posicion final del auto 2 4" do
+        map= MapOfRobot.new(5,8)
+        r = Robot.new(0,4,"N")
+        map.PutRobotInSquares(r)
+        map.MoveRobotInSquares(r,["A","A"])
+        x,y = r.GetPosition()
+        expect(x).to eq 2 and expect(y).to eq 4
+
+    end
+
     it "deberia devolver las posicion final del auto y su cardinalidad 3 1 N" do
         map= MapOfRobot.new(4,4)
         r = Robot.new(0,0,"N")

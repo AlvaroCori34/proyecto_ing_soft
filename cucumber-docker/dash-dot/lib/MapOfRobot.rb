@@ -9,9 +9,7 @@ class MapOfRobot
         @squares = Matrix.build(lim_x, lim_y) { Square.new()}
         #puts(@squares[0, 0].getObject())
     end
-    def GetSquare(row, col)
-        return @squares[row,col]
-    end
+
     def Shape()
         return @limit_x, @limit_y
     end

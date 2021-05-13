@@ -7,10 +7,10 @@ When("yo lleno en {string} con {string}") do |string, string2|
     fill_in(string, :with => string2)
 end
 
-When("presiono el boton para correr") do
-    click_button('correr')
+When("presiono el boton para asignar") do
+    click_button('asignar')
 end
-When("presione el boton correr") do
+When("presione el boton asignar") do
     visit '/comandos'
 end
 
