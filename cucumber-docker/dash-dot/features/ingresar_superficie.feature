@@ -10,4 +10,3 @@ Scenario:
     And presiono el boton para correr
     Then deberia mostrar los limites de la superficie: 'Tamaño de la superficie: 2 2'
 
-

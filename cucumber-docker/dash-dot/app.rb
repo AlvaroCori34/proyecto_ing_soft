@@ -18,8 +18,11 @@ post '/comandos' do
     @superficie_x, @superficie_y = @@mapa.Shape()
     comandos = params[:caja_de_comandos].to_s
     comandos = comandos.split("\n")
-    posiciones_auto = comandos[0].to_s
-    @@auto = Robot.new(posiciones_auto[0].to_i,posiciones_auto[2].to_i,posiciones_auto[4])
+    posiciones_auto = comandos[0].to_s.split(" ")
+    @pos_x = posiciones_auto[0].to_i
+    @pos_y = posiciones_auto[1].to_i
+    @card = posiciones_auto[2]
+    @@auto = Robot.new(@pos_x ,@pos_y ,@card)
     erb :comandos
 end
 get '/retornar' do

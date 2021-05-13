@@ -19,5 +19,11 @@ Then("deberia mostrar los limites de la superficie: {string}") do |string|
 end
 
 When("presiono el boton para correr_comandos") do
-    click_button('correr')
+    click_button('correr_comandos')
 end
+
+Then("veo la posicion como: {string}") do |string|
+    expect(page.body).to match /#{string}/m
+end
+
+

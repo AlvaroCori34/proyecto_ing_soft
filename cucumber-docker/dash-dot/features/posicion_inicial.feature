@@ -5,6 +5,6 @@ Feature:
 Scenario:
     Given ingresar a la pagina de comandos
     When yo lleno en 'caja_de_comandos' con '0 1 N'
-    And yo lleno en 'caja_de_comandos' con 'll'
     And  presiono el boton para correr_comandos
+    Then veo la posicion como: 'Posicion inicial del auto: 0 1 N'
     
