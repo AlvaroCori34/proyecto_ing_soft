@@ -1,17 +1,17 @@
 
 class Robot
-    def initialize(x, y, card)
+    def initialize(y, x, card)
         @pos_x = x
         @pos_y = y
         @cardinality = card
     end
     def GetPosition()
-        return @pos_x, @pos_y
+        return @pos_y, @pos_x
     end
     def GetCardinality()
         return @cardinality
     end
-    def SetNewPosition(x, y,card)
+    def SetNewPosition(y, x,card)
         @pos_x = x
         @pos_y = y
         @cardinality = card

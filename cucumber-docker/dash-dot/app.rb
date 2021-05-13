@@ -12,14 +12,12 @@ def asignarNuevoTamanioDeSuperficie()
     sup_x = params[:limite_x].to_i
     sup_y = params[:limite_y].to_i
     if (sup_x!=0 and sup_y!=0)
-        @@mapa = MapOfRobot.new(sup_x, sup_y)
+        @@mapa = MapOfRobot.new(sup_y, sup_x)
     end
 end
 
-def separarValoresDeCajaDeComando()
-    comandos = params[:caja_de_comandos].to_s
-    comandos = comandos.split("\n")
-
+def separarValoresDeUnAuto(comandos)
+    comandos = comandos.split('\n')
     posiciones_auto = comandos[0].to_s.split(",")
 
     cadena = comandos[0].to_s
@@ -41,25 +39,19 @@ post '/comandos' do
     if (params[:limite_x]!="" and params[:limite_y]!="")
         asignarNuevoTamanioDeSuperficie()
     end
-    @superficie_x, @superficie_y = @@mapa.Shape()
-
-    @pos_x, @pos_y, @card,cadena=separarValoresDeCajaDeComando()
-
-    @@auto = Robot.new(@pos_x ,@pos_y ,@card)
-
-    @instrucciones = cadena.upcase.split("")
-
-
-    if (@superficie_x>2 and @superficie_y>2)
+    @superficie_y, @superficie_x = @@mapa.Shape()
+    @instrucciones=[""]
+    if (params[:caja_de_comandos].to_s!="")
+        @pos_x, @pos_y, @card,cadena=separarValoresDeUnAuto(params[:caja_de_comandos].to_s)
+        @@auto = Robot.new(@pos_y ,@pos_x ,@card)
+        @instrucciones = cadena.upcase.split("")
         ins = @instrucciones
-        @@mapa.PutRobotInSquares(@@auto)
         @@mapa.MoveRobotInSquares(@@auto,ins) 
-
     end
 
     @instrucciones = @instrucciones.join("")
     
-    @pos_e_x , @pos_e_y = @@auto.GetPosition() 
+    @pos_e_y , @pos_e_x = @@auto.GetPosition() 
     @card_e = @@auto.GetCardinality()
 
     erb :comandos
@@ -69,5 +61,6 @@ get '/retornar' do
 end
 
 
-@@mapa = MapOfRobot.new(1,1)
-@@auto = Robot.new(0,0,'N')
+@@mapa = MapOfRobot.new(3,3)
+@@auto = Robot.new(1,1,'N')
+@@mapa.PutRobotInSquares(@@auto)
