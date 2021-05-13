@@ -40,8 +40,18 @@ post '/comandos' do
     @instrucciones = cadena.upcase.split("")
 
 
+    if (@superficie_x>2 and @superficie_y>2)
+
+        @@mapa.PutRobotInSquares(@@auto)
+        @@mapa.MoveRobotInSquares(@@auto,@instrucciones) 
+
+    end
+
     @instrucciones = @instrucciones.join("")
     
+    @pos_e_x , @pos_e_y = @@auto.GetPosition() 
+    @card_e = @@auto.GetCardinality()
+
     erb :comandos
 end
 get '/retornar' do

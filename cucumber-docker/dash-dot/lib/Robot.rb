@@ -11,6 +11,10 @@ class Robot
     def GetCardinality()
         return @cardinality
     end
+    def SetNewPosition(x, y)
+        @pos_x = x
+        @pos_y = y
+    end
 end
 
 
