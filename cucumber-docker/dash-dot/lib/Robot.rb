@@ -1,3 +1,4 @@
+
 class Robot
     def initialize(x, y, card)
         @pos_x = x
@@ -11,3 +12,6 @@ class Robot
         return @cardinality
     end
 end
+
+
+

@@ -11,7 +11,9 @@
     <input type="submit" value='correr_comandos'>
 </form>
 
-<p>Posicion inicial del auto: <%= @pos_x%> <%=@pos_y%> <%= @card%></p>
+<p>Posicion inicial del auto: <%=@pos_x%> <%=@pos_y%> <%= @card%></p>
+<p>Comandos de movimientos: <%=@instrucciones%></p>
+
 <form method='get' action='/retornar'>
     <input type='submit' value='Retornar'> 
 </form>

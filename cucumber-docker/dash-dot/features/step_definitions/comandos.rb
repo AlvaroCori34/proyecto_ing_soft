@@ -26,4 +26,9 @@ Then("veo la posicion como: {string}") do |string|
     expect(page.body).to match /#{string}/m
 end
 
-
+Then("veo las instrucciones: {string}") do |string|
+    puts("#################")
+    puts(page.body)
+    puts("#################")
+    expect(page.body).to match /#{string}/m
+end
