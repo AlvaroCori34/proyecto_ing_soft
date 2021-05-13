@@ -22,8 +22,8 @@ class MapOfRobot
     end
     def MoveRobotInSquares(robot, movements)
         pos_x, pos_y = robot.GetPosition()
-        @squares[pos_x, pos_y]=nil
         card = robot.GetCardinality()
+        @squares[pos_x, pos_y]=nil
         movements.each do |mov|
             if (card=='N')
                 if (mov=='A')
@@ -90,7 +90,7 @@ class MapOfRobot
                 end
             end
         end
-        robot.SetNewPosition(pos_x, pos_y)
+        robot.SetNewPosition(pos_x, pos_y,card)
         @squares[pos_x, pos_y]=robot
     end
 end
