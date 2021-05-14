@@ -1,11 +1,5 @@
 <h3>Comandos a ejecutar</h3>
-<form method='post' action='/comandos'>
-    <input type="submit" value='asignar'>
-    <input type="number" name="limite_x">
-    <input type="number" name="limite_y">
-</form>
 <h2>Tamaño de la superficie: <%= @superficie_x%> <%= @superficie_y%></h2> 
-<h2 name="caja_titulo">Caja</h2> 
 <form method='post' action='/comandos'>
     <textarea rows="4" cols="50" name="caja_de_comandos"></textarea>
     <input type="submit" value='correr_comandos'>
@@ -14,6 +8,7 @@
 <p>Posicion inicial del auto: <%=@pos_x%> <%=@pos_y%> <%= @card%></p>
 <p>Comandos de movimientos: <%=@instrucciones%></p>
 <p>Posicion final del auto: <%=@pos_e_x%> <%=@pos_e_y%> <%= @card_e%></p>
+
 
 <form method='get' action='/retornar'>
     <input type='submit' value='Retornar'> 

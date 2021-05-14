@@ -21,13 +21,18 @@ RSpec.describe "Pruebas del robot y su mapa" do
         map= MapOfRobot.new(2,5)
         expect(map.GetSizeMatrix()).to eq 10
     end
+    
+    it "deberia devolver las posiciones de los autos y su cardinalidad 3 1" do
+        car = Robot.new(1 , 3, "O")
+        y, x = car.GetPosition()
+        expect(x).to eq 3 and expect(y).to eq 1
+    end
     it "deberia devolver las posiciones de los autos y su cardinalidad 3 1 O" do
         car = Robot.new(1 , 3, "O")
         y, x = car.GetPosition()
         card = car.GetCardinality()
         expect(x).to eq 3 and expect(y).to eq 1 and expect(card).to eq "O"  
     end
-
     it "deberia devolver las posicion final del auto 0 4" do
         map= MapOfRobot.new(5,8)
         r = Robot.new(2,4,"N")
@@ -35,7 +40,6 @@ RSpec.describe "Pruebas del robot y su mapa" do
         map.MoveRobotInSquares(r,["A","A"])
         x,y = r.GetPosition()
         expect(x).to eq 0 and expect(y).to eq 4
-
     end
 
     it "deberia devolver la cardinalidad del auto en la direccion norte (N)" do
