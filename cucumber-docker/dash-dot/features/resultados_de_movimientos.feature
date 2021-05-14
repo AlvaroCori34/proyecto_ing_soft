@@ -12,6 +12,6 @@ Scenario:
 
 Scenario:
     Given ingresar a la pagina de comandos
-    When yo lleno en 'caja_de_comandos' con "8,6\n0,0,N\nDAA"
+    When yo lleno en 'caja_de_comandos' con "8,6\n0,0 N\nDAA"
     And presiono el boton para correr_comandos
     Then la instruccion de salida es: "Posicion final del auto: 3 0 E"

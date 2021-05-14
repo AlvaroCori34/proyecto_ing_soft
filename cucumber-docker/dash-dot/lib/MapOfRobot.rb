@@ -18,7 +18,11 @@ class MapOfRobot
     end
     def PutRobotInSquares(robot)
         pos_y, pos_x = robot.GetPosition()
-        @squares[pos_y,pos_x]=robot.GetPosition()
+        if (pos_y < @limit_y and pos_x < @limit_x)
+            @squares[pos_y,pos_x]=robot
+            return true
+        end
+        return false
     end
     def MoveRobotInSquares(robot, movements)
         pos_y, pos_x = robot.GetPosition()
@@ -27,7 +31,8 @@ class MapOfRobot
         @squares[pos_y, pos_x]=nil
         pos_x,pos_y,card = LoopIstructions(movements,pos_x,pos_y,lim_x,lim_y,card)
         robot.SetNewPosition(pos_y, pos_x,card)
-        @squares[pos_y, pos_x]=robot.GetPosition()
+        
+        @squares[pos_y, pos_x]=robot
     end
 end
 
