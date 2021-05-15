@@ -26,17 +26,19 @@ class MapOfRobot
     end
     def MoveRobotInSquares(robot, movements)
         pos_y, pos_x = robot.GetPosition()
-        lim_y, lim_x = Shape()
         card = robot.GetCardinality()
         @squares[pos_y, pos_x]=nil
-        pos_x,pos_y,card = LoopIstructions(movements,pos_x,pos_y,lim_x,lim_y,card)
+        pos_x,pos_y,card = LoopIstructions(movements,pos_x,pos_y,card)
         robot.SetNewPosition(pos_y, pos_x,card)
-        
+
+
         @squares[pos_y, pos_x]=robot
     end
 end
 
-def LoopIstructions(movements,pos_x,pos_y,lim_x,lim_y,card)
+def LoopIstructions(movements,pos_x,pos_y,card)
+    lim_y, lim_x = Shape()
+    
     movements.each do |mov|
         if card=="N"
             if mov=="A" and pos_y>0

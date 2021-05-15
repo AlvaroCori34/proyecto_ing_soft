@@ -7,7 +7,7 @@ Scenario:
     Given ingresar a la pagina de comandos
     When yo lleno en 'caja_de_comandos' con '8,6\nDAADII'
     And presiono el boton para correr_comandos
-    Then la instruccion de salida es: "Posicion final del auto: 4 0 N"
+    Then la instruccion de salida es: "Posicion final del auto: 4 1 N"
 
 
 Scenario:
