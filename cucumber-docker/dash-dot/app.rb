@@ -28,51 +28,27 @@ def Conseguir_Posicion_Inicial(cadena)
     end
     return pos_x,pos_y, card
 end
-post'/comandos' do
+def Mover_Un_Auto(bloque)
     @instrucciones=[""]
-    bloque=params[:caja_de_comandos].to_s
+    
     @pos_y, @pos_x = @@auto.GetPosition()
     ps_x,ps_y, crd = -1, -1, ""
-    sup_x, sup_y = -1, -1
-
     if (bloque.to_s!="")
         cadena = bloque.to_s
         cantidad_saltos_de_linea = cadena.count('\n')
-
-        if (cantidad_saltos_de_linea>=2)
-            cadena=cadena.split('\n')
-            sup_x, sup_y = Conseguir_Superficie(cadena[0].to_s)
-            ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena[1].to_s)
-            @instrucciones = cadena[2].to_s.split("")
-        end
-        #8,6\nDAADII
         if (cantidad_saltos_de_linea==1)
-            cantidad_de_separadores = cadena.count(",") + cadena.count(" ")
             cadena=cadena.split('\n')
-            if (cantidad_de_separadores == 2)
-                ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena[0].to_s)
-            end
-            if (cantidad_de_separadores == 1)
-                sup_x, sup_y = Conseguir_Superficie(cadena[0].to_s)
-            end
+            ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena[0].to_s)
             @instrucciones = cadena[1].to_s.split("")
         end
-
         if (cantidad_saltos_de_linea==0)
             cantidad_de_separadores = cadena.count(",") + cadena.count(" ")
             if (cantidad_de_separadores == 2)
                 ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena.to_s)
             end
-            if (cantidad_de_separadores == 1)
-                sup_x, sup_y = Conseguir_Superficie(cadena.to_s)
-            end
             if (cantidad_de_separadores == 0)
                 @instrucciones = cadena.to_s.split("")
-                
             end
-        end
-        if (sup_x>0 and sup_y>0)
-            @@mapa = MapOfRobot.new(sup_y, sup_x)
         end
         if (ps_x>=0 and ps_y>=0 and crd!="")
             @pos_y = ps_y
@@ -86,12 +62,68 @@ post'/comandos' do
         end
         @@mapa.MoveRobotInSquares(@@auto,@instrucciones) 
     end
-
     @superficie_y, @superficie_x = @@mapa.Shape()
     @instrucciones = @instrucciones.join("")
     
     @pos_e_y , @pos_e_x = @@auto.GetPosition() 
     @card_e = @@auto.GetCardinality()
+    return true
+end
+
+def separar_Bloques(bloque)
+    bloques_lista = []
+    auto_instruccion = ""
+    salto_de_linea = 0
+    saltos_de_linea = bloque.count('\n')
+    puts("11111111111111111111111111111111")
+    puts(bloque)
+    puts("11111111111111111111111111111")
+    while (salto_de_linea< saltos_de_linea) do
+        fin_de_linea = bloque.index('\n')
+        linea = bloque[0..fin_de_linea-1]
+        cantidad_de_separadores = linea.count(",") + linea.count(" ")
+        if (cantidad_de_separadores == 2)
+            if (auto_instruccion!="")
+                bloques_lista.push(auto_instruccion)
+                auto_instruccion = ""
+            end
+            auto_instruccion = linea
+        else
+            if (cantidad_de_separadores == 0)
+                auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? '\n' : '') + linea
+            end
+        end
+        bloque = bloque[fin_de_linea+2..bloque.length()]   
+        salto_de_linea = salto_de_linea + 1
+    end
+    auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? '\n' : '') + bloque
+    bloques_lista.push(auto_instruccion)
+    return bloques_lista
+end
+
+post'/comandos' do
+    bloque=params[:caja_de_comandos].to_s
+    primer_salto = bloque.index('\n')
+    primera_linea = bloque
+    if primer_salto != nil    
+        primera_linea = bloque[0..primer_salto]
+    end
+    if (primera_linea.count(",")==1 and primera_linea.count(" ")==0)
+        sup_x, sup_y = Conseguir_Superficie(primera_linea)
+        @@mapa = MapOfRobot.new(sup_y, sup_x)
+        if (primer_salto!=nil)
+            bloque=bloque[primer_salto+2..bloque.length()]
+        else
+            bloque = ""
+        end
+    else
+        bloque = primera_linea
+    end
+    bloques_por_auto = separar_Bloques(bloque)
+    #8,6\n0,0 N\nDAA\n0,0 N\nDAA
+    bloques_por_auto.each do |auto_ins|
+        Mover_Un_Auto(auto_ins)
+    end
     erb :comandos
 end
 get '/retornar' do
