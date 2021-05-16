@@ -1,6 +1,7 @@
 require 'matrix'
 require './lib/Square.rb'
 require './lib/Robot.rb'
+require './lib/Obstacle.rb'
 class MapOfRobot
 
     def initialize(lim_y, lim_x)

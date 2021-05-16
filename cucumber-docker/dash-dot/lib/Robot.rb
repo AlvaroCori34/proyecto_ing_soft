@@ -1,5 +1,5 @@
-
-class Robot
+require './lib/Square.rb'
+class Robot < Square
     def initialize(y, x, card)
         @pos_x = x
         @pos_y = y
@@ -15,6 +15,9 @@ class Robot
         @pos_x = x
         @pos_y = y
         @cardinality = card
+    end
+    def GetType()
+        return "robot"
     end
 end
 

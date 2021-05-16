@@ -1,15 +1,15 @@
 class Square 
     def initialize()
-        @object=nil
-
+        @object =  nil
     end
     def GetObject()
         return @object
     end
-    def ExistAobjectInTheSquare()
-        if (@object==nil)
-            return false 
-        end
+    def SetObject(obj)
+        @object = obj
+    end
+    def GetType()
+        yield
     end
 end
 

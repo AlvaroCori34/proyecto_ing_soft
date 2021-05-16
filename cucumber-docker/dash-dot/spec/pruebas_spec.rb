@@ -1,6 +1,7 @@
 require "./lib/MapOfRobot.rb"
 require "./lib/Square.rb"
 require "./lib/Robot.rb"
+require "./lib/Obstacle.rb"
 
 RSpec.describe "Pruebas del robot y su mapa" do
     it "deberia devolver para una casilla recien creada nil" do
@@ -78,4 +79,10 @@ RSpec.describe "Pruebas del robot y su mapa" do
         y,x = r.GetPosition()
         expect(x).to eq 3 and expect(y).to eq 0 and expect(r.GetCardinality()).to eq 'N' 
     end
+
+    it "deberia devolver el tipo del objeto ""obstaculo." do
+        obstaculo = Obstacle.new()
+        expect(obstaculo.GetType()).to eq "obstaculo"
+    end
+
 end

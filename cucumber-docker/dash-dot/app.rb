@@ -133,3 +133,4 @@ end
 
 @@mapa = MapOfRobot.new(3,3)
 @@auto = Robot.new(0,0,'N')
+
