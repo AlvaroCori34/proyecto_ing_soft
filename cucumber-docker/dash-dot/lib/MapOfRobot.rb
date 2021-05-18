@@ -8,7 +8,6 @@ class MapOfRobot
         @limit_x = lim_x
         @limit_y = lim_y
         @squares = Matrix.build(lim_y, lim_x) { Square.new()}
-        #puts(@squares[0, 0].getObject())
     end
 
     def Shape()
@@ -35,77 +34,82 @@ class MapOfRobot
 
         @squares[pos_y, pos_x]=robot
     end
-end
 
-def LoopIstructions(movements,pos_x,pos_y,card)
-    lim_y, lim_x = Shape()
-    
-    movements.each do |mov|
-        if card=="N"
-            if mov=="A" and pos_y>0
-                pos_y-=1
-                next
+    def LoopIstructions(movements,pos_x,pos_y,card)
+        lim_y, lim_x = Shape()
+        movements.each do |mov|
+            if card=="N"
+                if mov=="A" and pos_y>0
+                    pos_y-=1
+                    next
+                end
+                if mov=="D"
+                    card = "E"
+                    next
+                end
+                if mov=="I"
+                    card = "O"
+                    next
+                end
             end
-            if mov=="D" and pos_x < lim_x
-                pos_x+=1
-                card = "E"
-                next
+            if card=="E"
+                if mov=="A"  and pos_x < lim_x-1
+                    pos_x+=1
+                    next
+                end
+                if mov=="D"
+                    card = "S"
+                    next
+                end
+                if mov=="I"
+                    card = "N"
+                    next
+                end
             end
-            if mov=="I" and pos_x>0
-                pos_x-=1
-                card = "O"
-                next
+            if card=="S" 
+                if mov=="A"  and pos_y < lim_y-1
+                    pos_y+=1
+                    next
+                end
+                if mov=="D"
+                    card = "O"
+                    next
+                end
+                if mov=="I"
+                    card = "E"
+                    next
+                end
             end
-        end
-        if card=="E"
-            if mov=="A"  and pos_x < lim_x
-                pos_x+=1
-                next
-            end
-            if mov=="D"  and pos_y < lim_y
-                pos_y+=1
-                card = "S"
-                next
-            end
-            if mov=="I" and pos_y>0
-                pos_y-=1
-                card = "N"
-                next
-            end
-        end
-        if card=="S" 
-            if mov=="A"  and pos_y < lim_y
-                pos_y+=1
-                next
-            end
-            if mov=="D" and pos_x>0
-                pos_x-=1
-                card = "O"
-                next
-            end
-            if mov=="I"  and pos_x < lim_x
-                pos_x+=1
-                card = "E"
-                next
-            end
-        end
-        if card=="O"
-            if mov=="A"  and pos_x>0
-                pos_x-=1
-                next
-            end
-            if mov=="D"  and pos_y>0
-                pos_y-=1
-                card = "N"
-                next
-            end
-            if mov=="I" and pos_y < lim_y
-                pos_y+=1
-                card = "S"
-                next
+            if card=="O"
+                if mov=="A"  and pos_x>0
+                    pos_x-=1
+                    next
+                end
+                if mov=="D" 
+                    card = "N"
+                    next
+                end
+                if mov=="I"
+                    card = "S"
+                    next
+                end
             end
         end
+     return pos_x,pos_y,card
     end
-    return pos_x,pos_y,card
 end
 
+dic = {"NA"=>"-y",
+       "ND"=>"E",
+       "NI"=>"O",
+       "EA"=>"+x",
+       "ED"=>"E",
+       "EI"=>"N",
+       "SA"=>"+y",
+       "SD"=>"O",
+       "SI"=>"E",
+       "OA"=>"-x",
+       "OD"=>"N",
+       "OS"=>"S"
+      }
+puts(dic["NA"])

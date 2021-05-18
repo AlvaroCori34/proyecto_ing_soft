@@ -35,9 +35,9 @@ def Mover_Un_Auto(bloque)
     ps_x,ps_y, crd = -1, -1, ""
     if (bloque.to_s!="")
         cadena = bloque.to_s
-        cantidad_saltos_de_linea = cadena.count('\n')
+        cantidad_saltos_de_linea = cadena.count(@@separador_linea)
         if (cantidad_saltos_de_linea==1)
-            cadena=cadena.split('\n')
+            cadena=cadena.split(@@separador_linea)
             ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena[0].to_s)
             @instrucciones = cadena[1].to_s.split("")
         end
@@ -74,12 +74,10 @@ def separar_Bloques(bloque)
     bloques_lista = []
     auto_instruccion = ""
     salto_de_linea = 0
-    saltos_de_linea = bloque.count('\n')
-    puts("11111111111111111111111111111111")
-    puts(bloque)
-    puts("11111111111111111111111111111")
+    saltos_de_linea = bloque.count(@@separador_linea)
+
     while (salto_de_linea< saltos_de_linea) do
-        fin_de_linea = bloque.index('\n')
+        fin_de_linea = bloque.index(@@separador_linea)
         linea = bloque[0..fin_de_linea-1]
         cantidad_de_separadores = linea.count(",") + linea.count(" ")
         if (cantidad_de_separadores == 2)
@@ -90,20 +88,30 @@ def separar_Bloques(bloque)
             auto_instruccion = linea
         else
             if (cantidad_de_separadores == 0)
-                auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? '\n' : '') + linea
+                auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + linea
             end
         end
-        bloque = bloque[fin_de_linea+2..bloque.length()]   
+        bloque = bloque[fin_de_linea+(@@separador_linea.length())..bloque.length()]   
         salto_de_linea = salto_de_linea + 1
     end
-    auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? '\n' : '') + bloque
+    auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + bloque
     bloques_lista.push(auto_instruccion)
     return bloques_lista
 end
-
+def uniformizarSaltoDeLinea()
+    return true
+end
 post'/comandos' do
+    @@auto = Robot.new(0,0,"N")
     bloque=params[:caja_de_comandos].to_s
-    primer_salto = bloque.index('\n')
+    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+    #puts(bloque)
+    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+    bloque = bloque.gsub(@@separador_enter,@@separador_linea)
+    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+    #puts(bloque)
+    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+    primer_salto = bloque.index(@@separador_linea)
     primera_linea = bloque
     if primer_salto != nil    
         primera_linea = bloque[0..primer_salto]
@@ -112,7 +120,7 @@ post'/comandos' do
         sup_x, sup_y = Conseguir_Superficie(primera_linea)
         @@mapa = MapOfRobot.new(sup_y, sup_x)
         if (primer_salto!=nil)
-            bloque=bloque[primer_salto+2..bloque.length()]
+            bloque=bloque[primer_salto+(@@separador_linea.length())..bloque.length()]
         else
             bloque = ""
         end
@@ -130,7 +138,13 @@ get '/retornar' do
     redirect to('/')
 end
 
-
 @@mapa = MapOfRobot.new(3,3)
-@@auto = Robot.new(0,0,'N')
+#cucumber
+@@separador_linea = '\\n'
+#sinatra
+#@@separador_linea = "\n"
 
+
+@@separador_enter = "\n"
+
+#Los obstaculos se colocan despues de la superficie
