@@ -1,6 +1,7 @@
 require 'sinatra'
 require './config'
 require "./lib/MapOfRobot.rb"
+require './lib/ListOfRobots.rb'
 require "./lib/Square.rb"
 require "./lib/Robot.rb"
 get '/' do
@@ -29,6 +30,8 @@ def Conseguir_Posicion_Inicial(cadena)
     return pos_x,pos_y, card
 end
 def Mover_Un_Auto(bloque)
+
+
     @instrucciones=[""]
     
     @pos_y, @pos_x = @@auto.GetPosition()
@@ -55,6 +58,10 @@ def Mover_Un_Auto(bloque)
             @pos_x = ps_x
             @card = crd
             @@auto = Robot.new(@pos_y ,@pos_x ,@card)
+            
+            ins= @instrucciones
+            #@@listaDeRobots.AgregateNewRobot(@pos_y ,@pos_x ,@card, ins)
+
         end
         autoEstaEnPosicion = @@mapa.PutRobotInSquares(@@auto)
         if (!autoEstaEnPosicion)
@@ -104,13 +111,9 @@ end
 post'/comandos' do
     @@auto = Robot.new(0,0,"N")
     bloque=params[:caja_de_comandos].to_s
-    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-    #puts(bloque)
-    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
     bloque = bloque.gsub(@@separador_enter,@@separador_linea)
-    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-    #puts(bloque)
-    #puts("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+
     primer_salto = bloque.index(@@separador_linea)
     primera_linea = bloque
     if primer_salto != nil    
@@ -139,6 +142,8 @@ get '/retornar' do
 end
 
 @@mapa = MapOfRobot.new(3,3)
+
+@@listaDeRobots = ListOfRobots.new()
 #cucumber
 @@separador_linea = '\\n'
 #sinatra
