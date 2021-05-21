@@ -1,5 +1,6 @@
 require 'sinatra'
 require './config'
+require 'matrix'
 require "./lib/MapOfRobot.rb"
 require './lib/ListOfRobots.rb'
 require "./lib/Square.rb"
@@ -32,9 +33,9 @@ end
 def Mover_Un_Auto(bloque)
 
 
-    @instrucciones=[""]
+    instrucciones=[""]
     
-    @pos_y, @pos_x = @@auto.GetPosition()
+    pos_y, pos_x = @@auto.GetPosition()
     ps_x,ps_y, crd = -1, -1, ""
     if (bloque.to_s!="")
         cadena = bloque.to_s
@@ -42,7 +43,7 @@ def Mover_Un_Auto(bloque)
         if (cantidad_saltos_de_linea==1)
             cadena=cadena.split(@@separador_linea)
             ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena[0].to_s)
-            @instrucciones = cadena[1].to_s.split("")
+            instrucciones = cadena[1].to_s.split("")
         end
         if (cantidad_saltos_de_linea==0)
             cantidad_de_separadores = cadena.count(",") + cadena.count(" ")
@@ -50,30 +51,30 @@ def Mover_Un_Auto(bloque)
                 ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena.to_s)
             end
             if (cantidad_de_separadores == 0)
-                @instrucciones = cadena.to_s.split("")
+                instrucciones = cadena.to_s.split("")
+                ps_x = 0
+                ps_y = 0
+                crd = "N"
             end
         end
         if (ps_x>=0 and ps_y>=0 and crd!="")
-            @pos_y = ps_y
-            @pos_x = ps_x
-            @card = crd
-            @@auto = Robot.new(@pos_y ,@pos_x ,@card)
+            pos_y = ps_y
+            pos_x = ps_x
+            card = crd
+            @@auto = Robot.new(pos_y ,pos_x ,card)
             
-            ins= @instrucciones
-            #@@listaDeRobots.AgregateNewRobot(@pos_y ,@pos_x ,@card, ins)
-
+            ins= instrucciones
         end
+        @@listaDeRobots.AgregateNewRobot(@@auto, ins)
         autoEstaEnPosicion = @@mapa.PutRobotInSquares(@@auto)
         if (!autoEstaEnPosicion)
             return false
         end
-        @@mapa.MoveRobotInSquares(@@auto,@instrucciones) 
+        @@mapa.MoveRobotInSquares(@@auto,instrucciones) 
     end
     @superficie_y, @superficie_x = @@mapa.Shape()
-    @instrucciones = @instrucciones.join("")
+    instrucciones = instrucciones.join("")
     
-    @pos_e_y , @pos_e_x = @@auto.GetPosition() 
-    @card_e = @@auto.GetCardinality()
     return true
 end
 
@@ -109,7 +110,9 @@ def uniformizarSaltoDeLinea()
     return true
 end
 post'/comandos' do
+    @@listaDeRobots.ClearList()
     @@auto = Robot.new(0,0,"N")
+    @matrizDeDatosDeAutos=Matrix.build(0,0)
     bloque=params[:caja_de_comandos].to_s
 
     bloque = bloque.gsub(@@separador_enter,@@separador_linea)
@@ -135,8 +138,25 @@ post'/comandos' do
     bloques_por_auto.each do |auto_ins|
         Mover_Un_Auto(auto_ins)
     end
+    if (params[:caja_de_comandos].to_s!="")
+        @matrizDeDatosDeAutos= @@listaDeRobots.GetMatrixOfElementsOfCars()
+        puts("wwwwwwwwwwwwwwwwwwwwwww")
+        puts(@matrizDeDatosDeAutos)
+        puts(@matrizDeDatosDeAutos[0,1])
+        puts("wwwwwwwwwwwwwwwwwwwwwww")
+    end
+    cantidad_de_autos=@@listaDeRobots.CountRobots()
+    @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 }
     erb :comandos
 end
+=begin
+8,8
+2,2 N
+AAA
+7,7 O
+AAADA
+=end
+
 get '/retornar' do
     redirect to('/')
 end
