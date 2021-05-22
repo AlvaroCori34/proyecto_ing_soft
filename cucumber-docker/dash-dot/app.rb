@@ -161,14 +161,16 @@ post'/comandos' do
         else
             bloque = ""
         end
-    #else
-        #bloque = primera_linea
+
+    end
+    if (bloque!="")
+        #(P 1,2 - 3,5)
     end
     if (bloque!="")
         bloque=cargarObstaculos(bloque)
     end
     bloques_por_auto = separar_Bloques(bloque)
-    #8,6\n0,0 N\nDAA\n0,0 N\nDAA
+
 
     bloques_por_auto.each do |auto_ins|
         Mover_Un_Auto(auto_ins)
