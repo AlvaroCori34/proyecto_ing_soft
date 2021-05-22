@@ -19,27 +19,27 @@ end
 def Conseguir_Posicion_Inicial(cadena)
     sep_coma = cadena.index(",")
     sep_espacio = cadena.index(" ")
+    pos_x = 0
+    pos_y = 0
+    card = "N" 
     if (sep_coma!=nil and sep_espacio!=nil) 
         pos_x = cadena[0..sep_coma].to_i
         pos_y = cadena[sep_coma+1..sep_espacio].to_i
         card = cadena[sep_espacio+1,1]
-    else
-        pos_x = 0
-        pos_y = 0
-        card = "N"
     end
     return pos_x,pos_y, card
 end
 def Mover_Un_Auto(bloque)
-
 
     instrucciones=[""]
     
     pos_y, pos_x = @@auto.GetPosition()
     ps_x,ps_y, crd = -1, -1, ""
     if (bloque.to_s!="")
+
         cadena = bloque.to_s
         cantidad_saltos_de_linea = cadena.count(@@separador_linea)
+
         if (cantidad_saltos_de_linea==1)
             cadena=cadena.split(@@separador_linea)
             ps_x,ps_y, crd = Conseguir_Posicion_Inicial(cadena[0].to_s)
@@ -106,9 +106,39 @@ def separar_Bloques(bloque)
     bloques_lista.push(auto_instruccion)
     return bloques_lista
 end
-def uniformizarSaltoDeLinea()
-    return true
+def cargarObstaculos(bloque)
+    separador_salto_de_linea = bloque.index(@@separador_linea)
+    linea = bloque[0..separador_salto_de_linea]
+    while (separador_salto_de_linea!=nil and linea[0]=="O") do
+        bloque = bloque[separador_salto_de_linea + @@separador_linea.length()..bloque.length()]
+        linea = linea.gsub("O ","")
+        
+        linea = linea.split(",")
+        @@mapa.PutObstacle(linea[1].to_i, linea[0].to_i)
+        
+        separador_salto_de_linea = bloque.index(@@separador_linea)
+        linea = bloque[0..separador_salto_de_linea] 
+    end
+    if (separador_salto_de_linea==nil and bloque[0]=="O")
+        linea=bloque
+        linea = linea.gsub("O ","")
+        linea = linea.split(",")
+        @@mapa.PutObstacle(linea[1].to_i, linea[0].to_i)
+        bloque=""
+    end
+    return bloque
 end
+
+=begin
+5,5
+O 1,1
+O 2,2
+O 1,2
+0,0 N
+DAAA
+=end
+
+#8,6\nDAADII
 post'/comandos' do
     @@listaDeRobots.ClearList()
     @@auto = Robot.new(0,0,"N")
@@ -119,6 +149,7 @@ post'/comandos' do
 
     primer_salto = bloque.index(@@separador_linea)
     primera_linea = bloque
+    
     if primer_salto != nil    
         primera_linea = bloque[0..primer_salto]
     end
@@ -130,11 +161,15 @@ post'/comandos' do
         else
             bloque = ""
         end
-    else
-        bloque = primera_linea
+    #else
+        #bloque = primera_linea
+    end
+    if (bloque!="")
+        bloque=cargarObstaculos(bloque)
     end
     bloques_por_auto = separar_Bloques(bloque)
     #8,6\n0,0 N\nDAA\n0,0 N\nDAA
+
     bloques_por_auto.each do |auto_ins|
         Mover_Un_Auto(auto_ins)
     end
@@ -147,6 +182,7 @@ post'/comandos' do
     end
     cantidad_de_autos=@@listaDeRobots.CountRobots()
     @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 }
+    
     erb :comandos
 end
 =begin

@@ -6,6 +6,9 @@ class Square
     def GetObject()
         return @object
     end
+    def GetType()
+        return "cuadrilla"
+    end
     def ExistAobjectInTheSquare()
         if (@object==nil)
             return false 

@@ -1,4 +1,5 @@
 require "./lib/MapOfRobot.rb"
+require "./lib/Obstacle.rb"
 RSpec.describe "Pruebas del mapa donde se maneja el robot." do
     it "deberia devolver cantidad de las filas del mapa (3)" do
         mapa= MapOfRobot.new(4,3)
@@ -57,5 +58,12 @@ RSpec.describe "Pruebas del mapa donde se maneja el robot." do
         mapa.MoveRobotInSquares(auto,["A","A"])
         x,y = auto.GetPosition()
         expect(x).to eq 0 and expect(y).to eq 4
+    end
+    it "deberia agregar un obstaculo a la pista en la coordenada 3,3" do
+        x = 3
+        y = 3
+        mapa = MapOfRobot.new(8,8)
+        mapa.PutObstacle(y,x)
+        expect(mapa.GetSquareType(y, x)).to eq  "obstaculo" 
     end
 end
