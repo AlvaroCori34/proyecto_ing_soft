@@ -31,3 +31,8 @@ end
 Then("la instruccion de salida es: {string}") do |string|
     expect(page.body).to match /#{string}/m
   end
+Then("veo una fila: {string}") do |string|
+    expect(page.body).to match /#{string}/m
+  end
+
+ 

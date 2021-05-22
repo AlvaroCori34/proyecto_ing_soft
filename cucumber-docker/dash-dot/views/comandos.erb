@@ -30,14 +30,12 @@
    <% end %>
   </div>
   <div>
-  <h2>Mapa de la superficie</h2>
-  <%for @i in 0..@superficie_y-1%>
-      <%for @j in 0..@superficie_x-1%>
-        <span><%=@@mapa.GetSquareType(@i,@j)%></span>
-       <% end%> 
-       <br>
-  <% end%>
+    <h2>Mapa de la superficie</h2>
+    <%for @i in 0..@superficie_y-1%>
+        <div><%for @j in 0..@superficie_x-1;%><%=@@mapa.GetSquareType(@i,@j);%> <% end%></div>
+    <% end%>
   </div>
+  
   </body>
 </html>
 

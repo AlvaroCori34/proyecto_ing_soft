@@ -208,4 +208,5 @@ end
 
 @@separador_enter = "\n"
 
+
 #Los obstaculos se colocan despues de la superficie
