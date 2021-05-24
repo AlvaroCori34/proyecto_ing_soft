@@ -164,6 +164,7 @@ post'/comandos' do
 
     end
     if (bloque!="")
+        puts("eee")
         #(P 1,2 - 3,5)
     end
     if (bloque!="")
@@ -177,10 +178,6 @@ post'/comandos' do
     end
     if (params[:caja_de_comandos].to_s!="")
         @matrizDeDatosDeAutos= @@listaDeRobots.GetMatrixOfElementsOfCars()
-        puts("wwwwwwwwwwwwwwwwwwwwwww")
-        puts(@matrizDeDatosDeAutos)
-        puts(@matrizDeDatosDeAutos[0,1])
-        puts("wwwwwwwwwwwwwwwwwwwwwww")
     end
     cantidad_de_autos=@@listaDeRobots.CountRobots()
     @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 }
