@@ -19,7 +19,7 @@ RSpec.describe "Pruebas para puentes en la superficie" do
         expect(entrada_puente.GetOtherExtreme()).to eq salida_puente and
         expect(salida_puente.GetOtherExtreme()).to eq entrada_puente
     end 
-    it "deberia devolver el tipo de la entrada y salida de un puente dentro del mapa" do
+    it "Con 2 puentes deberia devolver el tipo de la entrada y salida de un puente dentro del mapa" do
         mapa = MapOfRobot.new(9,9)
         entrada_puente = Bridge.new(8,3)
         salida_puente = Bridge.new(2,3)
@@ -27,6 +27,15 @@ RSpec.describe "Pruebas para puentes en la superficie" do
         expect(mapa.GetSquareType(8,3)).to eq "puente" and
         expect(mapa.GetSquareType(2,3)).to eq "puente"
     end
+    it "Con 4 posiciones deberia devolver el tipo de la entrada y salida de un puente dentro del mapa" do
+        mapa = MapOfRobot.new(9,9)
+        entrada_puente = Bridge.new(8,3)
+        salida_puente = Bridge.new(2,3)
+        mapa.PutBridgeWithPositions(8,3, 2,3) 
+        expect(mapa.GetSquareType(8,3)).to eq "puente" and
+        expect(mapa.GetSquareType(2,3)).to eq "puente"
+    end
+
     it "Deberia devolver la posicion del auto al otro lado del puente y su tipo en el mapa." do
         mapa = MapOfRobot.new(9,9)
         entrada_puente = Bridge.new(2,3)

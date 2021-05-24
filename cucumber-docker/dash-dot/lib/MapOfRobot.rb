@@ -34,6 +34,9 @@ class MapOfRobot
     def PutObstacle(y , x)
         @squares[y,x] = Obstacle.new()
     end
+    def PutBridgeWithPositions(puente_inicial_y,puente_inicial_x,puente_salida_y,puente_salida_x)
+        PutBridgeWithTwoConnections(Bridge.new(puente_inicial_y,puente_inicial_x),Bridge.new(puente_salida_y,puente_salida_x))
+    end
     def PutBridgeWithTwoConnections(entrada_puente, salida_puente)
         y_entrada, x_entrada = entrada_puente.GetPosition()
         y_salida, x_salida = salida_puente.GetPosition()

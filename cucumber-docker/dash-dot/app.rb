@@ -164,7 +164,33 @@ post'/comandos' do
 
     end
     if (bloque!="")
-        puts("eee")
+        separador_salto_de_linea = bloque.index(@@separador_linea)
+        linea = bloque[0..separador_salto_de_linea]
+        while (separador_salto_de_linea!=nil and linea[0,2]=="(P") do
+            bloque = bloque[separador_salto_de_linea + @@separador_linea.length()..bloque.length()]
+            linea = linea.gsub("(P","")
+            linea = linea.gsub(")","")
+            linea = linea.gsub(" ","")
+            linea = linea.split("-")
+            puente_inicio = linea[0].split(",")
+            puente_salida = linea[1].split(",")
+            @@mapa.PutBridgeWithPositions(puente_inicio[1].to_i, puente_inicio[0].to_i, puente_salida[1].to_i,puente_salida[0].to_i)
+            
+            separador_salto_de_linea = bloque.index(@@separador_linea)
+            linea = bloque[0..separador_salto_de_linea] 
+        end
+        if (separador_salto_de_linea==nil and bloque[0,2]=="(P")
+            linea=bloque
+            linea = linea.gsub("(P","")
+            linea = linea.gsub(")","")
+            linea = linea.gsub(" ","")
+            linea = linea.split("-")
+            puente_inicio = linea[0].split(",")
+            puente_salida = linea[1].split(",")
+            @@mapa.PutBridgeWithPositions(puente_inicio[1].to_i, puente_inicio[0].to_i, puente_salida[1].to_i,puente_salida[0].to_i)
+            bloque=""
+        end
+        
         #(P 1,2 - 3,5)
     end
     if (bloque!="")
