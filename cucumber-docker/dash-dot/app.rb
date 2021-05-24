@@ -29,7 +29,120 @@ def Conseguir_Posicion_Inicial(cadena)
     end
     return pos_x,pos_y, card
 end
-def Mover_Un_Auto(bloque)
+def separarLimites(bloque)
+
+    primer_salto = bloque.index(@@separador_linea)
+    primera_linea = bloque
+    
+    if primer_salto != nil    
+        primera_linea = bloque[0..primer_salto]
+    end
+    if (primera_linea.count(",")==1 and primera_linea.count(" ")==0)
+        if (primer_salto!=nil)
+            bloque=bloque[primer_salto+(@@separador_linea.length())..bloque.length()]
+        else
+            bloque = ""
+        end
+    end
+    return bloque, primera_linea
+end
+def cargarLimites(limites)
+    if (limites.count(",")==1 and limites.count(" ")==0)
+        sup_x, sup_y = Conseguir_Superficie(limites)
+        @@mapa = MapOfRobot.new(sup_y, sup_x)
+    end
+end
+
+def separar_Bloques(bloque)
+    bloques_lista = []
+    auto_instruccion = ""
+    salto_de_linea = 0
+    saltos_de_linea = bloque.count(@@separador_linea)
+
+    while (salto_de_linea< saltos_de_linea) do
+        fin_de_linea = bloque.index(@@separador_linea)
+        linea = bloque[0..fin_de_linea-1]
+        cantidad_de_separadores = linea.count(",") + linea.count(" ")
+        if (cantidad_de_separadores == 2)
+            if (auto_instruccion!="")
+                bloques_lista.push(auto_instruccion)
+                auto_instruccion = ""
+            end
+            auto_instruccion = linea
+        else
+            if (cantidad_de_separadores == 0)
+                auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + linea
+            end
+        end
+        bloque = bloque[fin_de_linea+(@@separador_linea.length())..bloque.length()]   
+        salto_de_linea = salto_de_linea + 1
+    end
+    auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + bloque
+    bloques_lista.push(auto_instruccion)
+    return bloques_lista
+end
+
+def cargarObstaculo(linea)
+    linea = linea.gsub("O ","")
+    linea = linea.split(",")
+    @@mapa.PutObstacle(linea[1].to_i, linea[0].to_i)
+end
+
+def separarObstaculos(bloque)
+    separador_salto_de_linea = bloque.index(@@separador_linea)
+    linea = bloque[0..separador_salto_de_linea]
+    obstaculos = []
+    while (separador_salto_de_linea!=nil and linea[0]=="O") do
+        bloque = bloque[separador_salto_de_linea + @@separador_linea.length()..bloque.length()]
+        obstaculos.push(linea)
+        separador_salto_de_linea = bloque.index(@@separador_linea)
+        linea = bloque[0..separador_salto_de_linea] 
+    end
+    if (separador_salto_de_linea==nil and bloque[0]=="O")
+        linea=bloque
+        obstaculos.push(linea)
+        bloque=""
+    end
+    return bloque, obstaculos
+end
+def cargarObstaculos(obstaculos)
+    obstaculos.each do |obstaculo|
+        cargarObstaculo(obstaculo)
+    end
+end
+
+def cargarPuente(linea)
+    linea = linea.gsub("(P","")
+    linea = linea.gsub(")","")
+    linea = linea.gsub(" ","")
+    linea = linea.split("-")
+    puente_inicio = linea[0].split(",")
+    puente_salida = linea[1].split(",")
+    @@mapa.PutBridgeWithPositions(puente_inicio[1].to_i, puente_inicio[0].to_i, puente_salida[1].to_i,puente_salida[0].to_i)
+end
+def separarPuentes(bloque)
+    separador_salto_de_linea = bloque.index(@@separador_linea)
+    linea = bloque[0..separador_salto_de_linea]
+    puentes=[]
+    while (separador_salto_de_linea!=nil and linea[0,2]=="(P") do
+        bloque = bloque[separador_salto_de_linea + @@separador_linea.length()..bloque.length()]
+        puentes.push(linea)
+        separador_salto_de_linea = bloque.index(@@separador_linea)
+        linea = bloque[0..separador_salto_de_linea] 
+    end
+    if (separador_salto_de_linea==nil and bloque[0,2]=="(P")
+        linea=bloque
+        puentes.push(linea)
+        bloque=""
+    end
+    return bloque, puentes
+end
+def cargarPuentes(puentes)
+    puentes.each do |puente|
+        cargarPuente(puente)
+    end
+end
+def moverUnAutoYGuardar(bloque)
 
     instrucciones=[""]
     
@@ -77,58 +190,14 @@ def Mover_Un_Auto(bloque)
     
     return true
 end
-
-def separar_Bloques(bloque)
-    bloques_lista = []
-    auto_instruccion = ""
-    salto_de_linea = 0
-    saltos_de_linea = bloque.count(@@separador_linea)
-
-    while (salto_de_linea< saltos_de_linea) do
-        fin_de_linea = bloque.index(@@separador_linea)
-        linea = bloque[0..fin_de_linea-1]
-        cantidad_de_separadores = linea.count(",") + linea.count(" ")
-        if (cantidad_de_separadores == 2)
-            if (auto_instruccion!="")
-                bloques_lista.push(auto_instruccion)
-                auto_instruccion = ""
-            end
-            auto_instruccion = linea
-        else
-            if (cantidad_de_separadores == 0)
-                auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + linea
-            end
-        end
-        bloque = bloque[fin_de_linea+(@@separador_linea.length())..bloque.length()]   
-        salto_de_linea = salto_de_linea + 1
-    end
-    auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + bloque
-    bloques_lista.push(auto_instruccion)
-    return bloques_lista
+def cargarNumerosDeAutos(cantidad_de_autos)
+    @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 } 
 end
-def cargarObstaculos(bloque)
-    separador_salto_de_linea = bloque.index(@@separador_linea)
-    linea = bloque[0..separador_salto_de_linea]
-    while (separador_salto_de_linea!=nil and linea[0]=="O") do
-        bloque = bloque[separador_salto_de_linea + @@separador_linea.length()..bloque.length()]
-        linea = linea.gsub("O ","")
-        
-        linea = linea.split(",")
-        @@mapa.PutObstacle(linea[1].to_i, linea[0].to_i)
-        
-        separador_salto_de_linea = bloque.index(@@separador_linea)
-        linea = bloque[0..separador_salto_de_linea] 
+def cargarAutos(bloques_por_auto)
+    bloques_por_auto.each do |auto_ins|
+        moverUnAutoYGuardar(auto_ins)
     end
-    if (separador_salto_de_linea==nil and bloque[0]=="O")
-        linea=bloque
-        linea = linea.gsub("O ","")
-        linea = linea.split(",")
-        @@mapa.PutObstacle(linea[1].to_i, linea[0].to_i)
-        bloque=""
-    end
-    return bloque
 end
-
 =begin
 5,5
 O 1,1
@@ -144,70 +213,21 @@ post'/comandos' do
     @@auto = Robot.new(0,0,"N")
     @matrizDeDatosDeAutos=Matrix.build(0,0)
     bloque=params[:caja_de_comandos].to_s
-
     bloque = bloque.gsub(@@separador_enter,@@separador_linea)
-
-    primer_salto = bloque.index(@@separador_linea)
-    primera_linea = bloque
-    
-    if primer_salto != nil    
-        primera_linea = bloque[0..primer_salto]
-    end
-    if (primera_linea.count(",")==1 and primera_linea.count(" ")==0)
-        sup_x, sup_y = Conseguir_Superficie(primera_linea)
-        @@mapa = MapOfRobot.new(sup_y, sup_x)
-        if (primer_salto!=nil)
-            bloque=bloque[primer_salto+(@@separador_linea.length())..bloque.length()]
-        else
-            bloque = ""
-        end
-
-    end
     if (bloque!="")
-        separador_salto_de_linea = bloque.index(@@separador_linea)
-        linea = bloque[0..separador_salto_de_linea]
-        while (separador_salto_de_linea!=nil and linea[0,2]=="(P") do
-            bloque = bloque[separador_salto_de_linea + @@separador_linea.length()..bloque.length()]
-            linea = linea.gsub("(P","")
-            linea = linea.gsub(")","")
-            linea = linea.gsub(" ","")
-            linea = linea.split("-")
-            puente_inicio = linea[0].split(",")
-            puente_salida = linea[1].split(",")
-            @@mapa.PutBridgeWithPositions(puente_inicio[1].to_i, puente_inicio[0].to_i, puente_salida[1].to_i,puente_salida[0].to_i)
-            
-            separador_salto_de_linea = bloque.index(@@separador_linea)
-            linea = bloque[0..separador_salto_de_linea] 
-        end
-        if (separador_salto_de_linea==nil and bloque[0,2]=="(P")
-            linea=bloque
-            linea = linea.gsub("(P","")
-            linea = linea.gsub(")","")
-            linea = linea.gsub(" ","")
-            linea = linea.split("-")
-            puente_inicio = linea[0].split(",")
-            puente_salida = linea[1].split(",")
-            @@mapa.PutBridgeWithPositions(puente_inicio[1].to_i, puente_inicio[0].to_i, puente_salida[1].to_i,puente_salida[0].to_i)
-            bloque=""
-        end
-        
-        #(P 1,2 - 3,5)
-    end
-    if (bloque!="")
-        bloque=cargarObstaculos(bloque)
+        bloque, limites = separarLimites(bloque)
+        cargarLimites(limites)
+        bloque, puentes = separarPuentes(bloque)
+        cargarPuentes(puentes)
+        bloque, obstaculos = separarObstaculos(bloque)
+        cargarObstaculos(obstaculos)
     end
     bloques_por_auto = separar_Bloques(bloque)
-
-
-    bloques_por_auto.each do |auto_ins|
-        Mover_Un_Auto(auto_ins)
-    end
-    if (params[:caja_de_comandos].to_s!="")
+    cargarAutos(bloques_por_auto)
+    if (bloque!="")
         @matrizDeDatosDeAutos= @@listaDeRobots.GetMatrixOfElementsOfCars()
     end
-    cantidad_de_autos=@@listaDeRobots.CountRobots()
-    @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 }
-    
+    cargarNumerosDeAutos(@@listaDeRobots.CountRobots())
     erb :comandos
 end
 =begin
