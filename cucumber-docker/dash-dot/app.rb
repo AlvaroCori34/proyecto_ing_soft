@@ -143,7 +143,7 @@ def cargarPuentes(puentes)
     end
 end
 def moverUnAutoYGuardar(bloque)
-
+    mensaje = ""
     instrucciones=[""]
     
     pos_y, pos_x = @@auto.GetPosition()
@@ -175,28 +175,31 @@ def moverUnAutoYGuardar(bloque)
             pos_x = ps_x
             card = crd
             @@auto = Robot.new(pos_y ,pos_x ,card)
-            
-            ins= instrucciones
+
         end
-        @@listaDeRobots.AgregateNewRobot(@@auto, ins)
-        autoEstaEnPosicion = @@mapa.PutRobotInSquares(@@auto)
-        if (!autoEstaEnPosicion)
-            return false
+        
+        mensaje = @@mapa.PutRobotInSquares(@@auto)
+        if (mensaje=="robot en el mapa")
+            @@listaDeRobots.AgregateNewRobot(@@auto, instrucciones)
+            @@mapa.MoveRobotInSquares(@@auto,instrucciones)
         end
-        @@mapa.MoveRobotInSquares(@@auto,instrucciones) 
     end
     @superficie_y, @superficie_x = @@mapa.Shape()
-    instrucciones = instrucciones.join("")
     
-    return true
+    
+    return mensaje
 end
 def cargarNumerosDeAutos(cantidad_de_autos)
     @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 } 
 end
+
+
 def cargarAutos(bloques_por_auto)
+    mensaje=""
     bloques_por_auto.each do |auto_ins|
-        moverUnAutoYGuardar(auto_ins)
+        mensaje=mensaje+moverUnAutoYGuardar(auto_ins)+"<br>"
     end
+    return mensaje
 end
 =begin
 5,5
@@ -223,7 +226,7 @@ post'/comandos' do
         cargarObstaculos(obstaculos)
     end
     bloques_por_auto = separar_Bloques(bloque)
-    cargarAutos(bloques_por_auto)
+    @mensajeDeRobots = cargarAutos(bloques_por_auto)
     if (bloque!="")
         @matrizDeDatosDeAutos= @@listaDeRobots.GetMatrixOfElementsOfCars()
     end

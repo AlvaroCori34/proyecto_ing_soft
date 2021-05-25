@@ -18,12 +18,16 @@ class MapOfRobot
         return @limit_y * @limit_x
     end
     def PutRobotInSquares(robot)
+        
         pos_y, pos_x = robot.GetPosition()
-        if (pos_y < @limit_y and pos_x < @limit_x)
-            @squares[pos_y,pos_x]=robot
-            return true
+        if (pos_y >= @limit_y or pos_x >= @limit_x)
+            return "robot esta fuera del mapa"
         end
-        return false
+        if (@squares[pos_y,pos_x].GetType() == "obstaculo")
+            return "no se puede crear el robot en un obstaculo" + " " + pos_x.to_s + " " + pos_y.to_s
+        end
+        @squares[pos_y,pos_x]=robot
+        return "robot en el mapa"
     end
     def MoveRobotInSquares(robot, movements)
         pos_y, pos_x = robot.GetPosition()
