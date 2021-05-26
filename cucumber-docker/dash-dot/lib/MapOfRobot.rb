@@ -62,7 +62,7 @@ class MapOfRobot
         robot.SetNewPosition(y,x, cardinalidad)
         swap(anterior_y,anterior_x,y,x)
     end
-    def MoveRobotInSquare(robot,nueva_posicion_y,nueva_posicion_x,cardinalidad)
+    def MoveRobotInSquare(robot,nueva_posicion_y,nueva_posicion_x,cardinalidad, robot_choco)
         objeto = @squares[nueva_posicion_y,nueva_posicion_x].GetType()
         posicion_robot_y,posicion_robot_x =robot.GetPosition()
 
@@ -87,17 +87,27 @@ class MapOfRobot
             robot.SetNewPosition(nueva_posicion_y,nueva_posicion_x,cardinalidad)
             swap(posicion_robot_y,posicion_robot_x,nueva_posicion_y, nueva_posicion_x)
         end
-        return nueva_posicion_y,nueva_posicion_x,cardinalidad
+        if (objeto=="obstaculo")
+            robot_choco = true
+
+        end
+        return nueva_posicion_y,nueva_posicion_x,cardinalidad, robot_choco
     end
     def LoopInstructions(movimientos,robot,cardinalidad)
         pos_y,pos_x = robot.GetPosition()
         lim_y, lim_x = Shape()
+        robot_choco = false
         movimientos.each do |movimiento|
             case cardinalidad
                 when "N"
                     case movimiento
+
                         when "A"
-                            pos_y-=1 if (pos_y>0)
+                            if (pos_y>0) 
+                                pos_y-=1
+                            else
+                                robot_choco = true
+                            end
                         when "D" 
                             cardinalidad = "E"
                         when "I"
@@ -106,7 +116,11 @@ class MapOfRobot
                 when "E"
                     case movimiento
                         when "A"
-                            pos_x+=1 if (pos_x<lim_x-1)
+                            if (pos_x<lim_x-1)
+                                pos_x+=1 
+                            else
+                                robot_choco = true
+                            end
                         when "D" 
                             cardinalidad = "S"
                         when "I"
@@ -115,7 +129,11 @@ class MapOfRobot
                 when "S"
                     case movimiento
                         when "A"
-                            pos_y+=1 if (pos_y<lim_y-1)
+                            if (pos_y<lim_y-1)
+                                pos_y+=1 
+                            else
+                                robot_choco = true
+                            end
                         when "D" 
                             cardinalidad = "O"
                         when "I"
@@ -124,7 +142,11 @@ class MapOfRobot
                 when "O"
                     case movimiento
                         when "A"
-                             pos_x-=1 if (pos_x>0)
+                            if (pos_x>0)
+                                pos_x-=1 
+                            else
+                                robot_choco = true
+                            end
                         when "D" 
                              cardinalidad = "N"
                         when "I"
@@ -132,11 +154,11 @@ class MapOfRobot
                         end 
                 end
                 if (movimiento=="A")
-                    pos_y,pos_x,cardinalidad = MoveRobotInSquare(robot,pos_y,pos_x,cardinalidad)
+                    pos_y,pos_x,cardinalidad, robot_choco = MoveRobotInSquare(robot,pos_y,pos_x,cardinalidad,robot_choco)
                 else
                     robot.SetNewPosition(pos_y,pos_x,cardinalidad)
                 end
-                
+                break if (robot_choco==true)     
         end
         return pos_x,pos_y,cardinalidad
     end
