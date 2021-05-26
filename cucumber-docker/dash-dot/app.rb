@@ -201,16 +201,7 @@ def cargarAutos(bloques_por_auto)
     end
     return mensaje
 end
-=begin
-5,5
-O 1,1
-O 2,2
-O 1,2
-0,0 N
-DAAA
-=end
 
-#8,6\nDAADII
 post'/comandos' do
     @@listaDeRobots.ClearList()
     @@auto = Robot.new(0,0,"N")
