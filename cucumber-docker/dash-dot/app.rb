@@ -225,13 +225,7 @@ post'/comandos' do
     cargarNumerosDeAutos(@@listaDeRobots.CountRobots())
     erb :comandos
 end
-=begin
-8,8
-2,2 N
-AAA
-7,7 O
-AAADA
-=end
+
 
 get '/retornar' do
     redirect to('/')

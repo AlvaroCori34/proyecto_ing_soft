@@ -7,7 +7,6 @@ When("yo lleno en {string} con {string}") do |string, string2|
     fill_in(string, :with => string2)
 end
 
-
 When("presione el boton asignar") do
     visit '/comandos'
 end
@@ -35,6 +34,7 @@ end
 Then("la instruccion de salida es: {string}") do |string|
     expect(page.body).to match /#{string}/m
   end
+
 Then("veo una fila: {string}") do |string|
     expect(page.body).to match /#{string}/m
   end

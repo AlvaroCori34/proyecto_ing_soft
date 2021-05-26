@@ -25,4 +25,5 @@ for unit test:
 for acceptance test:
 	cucumber
 
-[![Build Status](https://travis-ci.com/AlvaroCori34/proyecto_ing_soft.svg?branch=main)](https://travis-ci.com/AlvaroCori34/proyecto_ing_soft)
+[![Build Status](https://travis-ci.com/AlvaroCori34/proyecto_ing_soft.svg?branch=main)]
+(https://travis-ci.com/AlvaroCori34/proyecto_ing_soft)
