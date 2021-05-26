@@ -202,6 +202,7 @@ def cargarAutos(bloques_por_auto)
     return mensaje
 end
 
+
 post'/comandos' do
     @@listaDeRobots.ClearList()
     @@auto = Robot.new(0,0,"N")
