@@ -23,7 +23,7 @@ class MapOfRobot
         if (pos_y >= @limit_y or pos_x >= @limit_x)
             return "robot esta fuera del mapa"
         end
-        if (@squares[pos_y,pos_x].GetType() == "obstaculo")
+        if (@squares[pos_y,pos_x].GetType() == "obstaculo" or @squares[pos_y,pos_x].GetType() == "robot")
             return "no se puede crear el robot en un obstaculo" + " " + pos_x.to_s + " " + pos_y.to_s
         end
         @squares[pos_y,pos_x]=robot
@@ -70,6 +70,9 @@ class MapOfRobot
         if (objeto=="cuadrilla")
             MoveRobot(nueva_posicion_y,nueva_posicion_x,cardinalidad,robot)
         end
+        if (objeto=="obstaculo" or objeto=="robot")
+            robot_choco = true
+        end
         if (objeto=="puente")
             nueva_posicion_del_puente_y, nueva_posicion_del_puente_x= @squares[nueva_posicion_y,nueva_posicion_x].GetOtherExtreme().GetPosition()
             case cardinalidad
@@ -86,10 +89,6 @@ class MapOfRobot
             nueva_posicion_x = nueva_posicion_del_puente_x
             robot.SetNewPosition(nueva_posicion_y,nueva_posicion_x,cardinalidad)
             swap(posicion_robot_y,posicion_robot_x,nueva_posicion_y, nueva_posicion_x)
-        end
-        if (objeto=="obstaculo")
-            robot_choco = true
-
         end
         return nueva_posicion_y,nueva_posicion_x,cardinalidad, robot_choco
     end
