@@ -23,7 +23,7 @@ class MapOfRobot
         if (pos_y >= @limit_y or pos_x >= @limit_x)
             return "robot esta fuera del mapa"
         end
-        if (@squares[pos_y,pos_x].GetType() == "obstaculo")
+        if (@squares[pos_y,pos_x].GetType() == "obstaculo" or @squares[pos_y,pos_x].GetType() == "robot")
             return "no se puede crear el robot en un obstaculo" + " " + pos_x.to_s + " " + pos_y.to_s
         end
         @squares[pos_y,pos_x]=robot
