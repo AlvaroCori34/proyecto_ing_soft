@@ -52,15 +52,40 @@ def cargarLimites(limites)
         @@mapa = MapOfRobot.new(sup_y, sup_x)
     end
 end
-
+=begin
+1,1 N
+AA
+2,2 O
+AA
+3,3 E
+AA
+AAAD
+=end
 def separar_Bloques(bloque)
     bloques_lista = []
     auto_instruccion = ""
     salto_de_linea = 0
     saltos_de_linea = bloque.count(@@separador_linea)
-
-    while (salto_de_linea< saltos_de_linea) do
+    while (bloque!="")
         fin_de_linea = bloque.index(@@separador_linea)
+        if (fin_de_linea==nil)
+            if (auto_instruccion!="")
+                cantidad_de_separadores = bloque.count(",") + bloque.count(" ")
+                if (cantidad_de_separadores == 2)
+                    bloques_lista.push(auto_instruccion)
+                    auto_instruccion = ""
+                    bloques_lista.push(bloque)
+                end
+                if (cantidad_de_separadores == 0)
+                    bloques_lista.push(auto_instruccion+@@separador_linea+bloque)
+                    auto_instruccion = ""
+                end
+            else
+                bloques_lista.push(bloque) 
+            end
+            bloque=""
+            next
+        end
         linea = bloque[0..fin_de_linea-1]
         cantidad_de_separadores = linea.count(",") + linea.count(" ")
         if (cantidad_de_separadores == 2)
@@ -69,14 +94,15 @@ def separar_Bloques(bloque)
                 auto_instruccion = ""
             end
             auto_instruccion = linea
-        else
-            if (cantidad_de_separadores == 0)
-                auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + linea
-            end
+        end
+        if (cantidad_de_separadores == 0)
+            auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + linea
+            bloques_lista.push(auto_instruccion)
+            auto_instruccion = ""
         end
         bloque = bloque[fin_de_linea+(@@separador_linea.length())..bloque.length()]   
-        salto_de_linea = salto_de_linea + 1
     end
+
     auto_instruccion = auto_instruccion+ ((auto_instruccion!="")? @@separador_linea : '') + bloque
     bloques_lista.push(auto_instruccion)
     return bloques_lista
@@ -184,14 +210,11 @@ def moverUnAutoYGuardar(bloque)
             @@mapa.MoveRobotInSquares(@@auto,instrucciones)
         end
     end
-    @superficie_y, @superficie_x = @@mapa.Shape()
     
     
     return mensaje
 end
-def cargarNumerosDeAutos(cantidad_de_autos)
-    @numeros_de_autos = Array.new(cantidad_de_autos) { |a| a + 1 } 
-end
+
 
 
 def cargarAutos(bloques_por_auto)
@@ -201,6 +224,7 @@ def cargarAutos(bloques_por_auto)
     end
     return mensaje
 end
+
 
 
 post'/comandos' do
@@ -222,11 +246,39 @@ post'/comandos' do
     if (bloque!="")
         @matrizDeDatosDeAutos= @@listaDeRobots.GetMatrixOfElementsOfCars()
     end
-    cargarNumerosDeAutos(@@listaDeRobots.CountRobots())
+    @superficie_y, @superficie_x = @@mapa.Shape()
+    @numeros_de_autos = Array.new(@@listaDeRobots.CountRobots()) { |a| a + 1 } 
+    @cadena_de_resultados=""
+    @numeros_de_autos.each do |auto|
+        @cadena_de_resultados+="<h3>Auto #{auto}:</h3>"
+        @cadena_de_resultados+="<div>Posicion Inicial: #{@matrizDeDatosDeAutos[auto-1,0][0].to_s},#{@matrizDeDatosDeAutos[auto-1,1][0].to_s} #{@matrizDeDatosDeAutos[auto-1,2][0].to_s}</div>"
+        @cadena_de_resultados+="<div>Comandos ejecutados: #{@matrizDeDatosDeAutos[auto-1,3][0].to_s}</div>"
+        @cadena_de_resultados+="<div>Posicion Final: #{@matrizDeDatosDeAutos[auto-1,4][0].to_s },#{@matrizDeDatosDeAutos[auto-1,5][0].to_s} #{@matrizDeDatosDeAutos[auto-1,6][0].to_s}</div>"
+    end
+    @grilla=""
+
+    for @i in 0..@superficie_y-1
+        @grilla+="<div>"
+        for @j in 0..@superficie_x-1
+            @grilla+=@@mapa.GetSquareType(@i,@j)+" "
+        end
+        @grilla+="</div>"
+    end
     erb :comandos
 end
-
-
+=begin
+8,8
+1,1 N
+2,2 N
+3,3 N
+4,4 N
+5,5 N
+6,6 N
+7,7 N
+<%for @i in 0..@superficie_y-1%>
+        <div><%for @j in 0..@superficie_x-1;%><%=@@mapa.GetSquareType(@i,@j);%> <% end%></div>
+    <% end%>
+=end
 get '/retornar' do
     redirect to('/')
 end

@@ -22,18 +22,11 @@
     <h1>Names of all the people</h1>
   <div>
   <h2>Superficie del terreno: <%= @superficie_x%>,<%= @superficie_y%></h2> 
-   <% @numeros_de_autos.each do |auto| %>
-      <h3>Auto <%= auto %>:</h3>
-       <div>Posicion Inicial: <%= @matrizDeDatosDeAutos[auto-1,0][0].to_s %>,<%= @matrizDeDatosDeAutos[auto-1,1][0].to_s %> <%= @matrizDeDatosDeAutos[auto-1,2][0].to_s %></div>
-       <div>Comandos ejecutados: <%= @matrizDeDatosDeAutos[auto-1,3][0].to_s %></div>
-       <div>Posicion Final: <%= @matrizDeDatosDeAutos[auto-1,4][0].to_s %>,<%= @matrizDeDatosDeAutos[auto-1,5][0].to_s %> <%= @matrizDeDatosDeAutos[auto-1,6][0].to_s %></div>
-   <% end %>
+   <div><%=@cadena_de_resultados%></div>  
   </div>
   <div>
     <h2>Mapa de la superficie</h2>
-    <%for @i in 0..@superficie_y-1%>
-        <div><%for @j in 0..@superficie_x-1;%><%=@@mapa.GetSquareType(@i,@j);%> <% end%></div>
-    <% end%>
+    <div><%=@grilla%></div>
   </div>
   <div><%= @mensajeDeRobots%></div>
   </body>
