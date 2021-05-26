@@ -1,6 +1,5 @@
 require './lib/Square.rb'
 class Obstacle < Square
-
     def initialize()
         super()
         SetObject("O")
