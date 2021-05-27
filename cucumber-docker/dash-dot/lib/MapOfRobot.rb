@@ -100,7 +100,6 @@ class MapOfRobot
             case cardinalidad
                 when "N"
                     case movimiento
-
                         when "A"
                             if (pos_y>0) 
                                 pos_y-=1

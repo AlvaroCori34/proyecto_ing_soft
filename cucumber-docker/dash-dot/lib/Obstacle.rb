@@ -1,13 +1,9 @@
 require './lib/Square.rb'
 class Obstacle < Square
     def initialize()
-        super()
-        SetObject("O")
-    end
-    def SetObject(obj)
-        @object=obj
+        @type="obstaculo"
     end
     def GetType()
-        return "obstaculo"
+        return @type
     end
 end

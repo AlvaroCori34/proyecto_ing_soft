@@ -7,6 +7,7 @@ class Robot < Square
         @pos_y_initial = y
         @cardinality = card
         @cardinality_initial = card
+        @type="robot"
     end
     def GetPosition()
         return @pos_y, @pos_x
@@ -27,7 +28,7 @@ class Robot < Square
 
     end
     def GetType()
-        return "robot"
+        return @type
     end
 end
 
